@@ -23,9 +23,10 @@ const StringUpload: NextPage = () => {
             value={string}
             onChange={(e) => setString(e.target.value)}
             multiline
+            title="Template"
             minRows={8}
             maxRows={8}
-            title="Template"
+            inputProps={{ style: { minHeight: "217px", maxHeight: "217px" } }}
           />
         </Stack>
 
