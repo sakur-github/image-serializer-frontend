@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper";
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import styles from "styles/UploadComponent.module.css";
 
-const FileUpload: NextPage = () => {
+const FileUpload = () => {
   const [file, setFile] = useState<File>();
   return (
     <Paper className={styles.mainpaper}>
