@@ -1,16 +1,17 @@
-import type { NextPage } from "next";
 import { useCallback, ChangeEvent, useState } from "react";
 import Paper from "@mui/material/Paper";
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Button, Stack, TextField, Typography, Alert } from "@mui/material";
 import styles from "styles/UploadComponent.module.css";
 import { fileUpload } from "src/api";
 import Dialog from "./Dialog";
+import { LoadingButton } from "@mui/lab";
 
 const FileUpload = () => {
   const [file, setFile] = useState<File>();
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
   const [content, setContent] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const disabled = !file;
 
   const handleFileChange = useCallback(
@@ -19,19 +20,22 @@ const FileUpload = () => {
       if (input?.files) {
         setFile(input.files[0]);
       }
-      setError(false);
+      setError("");
     },
     []
   );
 
   const send = useCallback(() => {
     if (!disabled) {
+      setLoading(true);
       fileUpload({ file }).then((data) => {
+        setLoading(false);
         if (data?.message) {
-          setError(true);
+          setError(data.message);
+        } else {
+          setContent(data?.content);
+          setDialogOpen(true);
         }
-        setContent(data?.message || data?.content);
-        setDialogOpen(true);
       });
     }
   }, [disabled, file]);
@@ -41,26 +45,26 @@ const FileUpload = () => {
       <Paper className={styles.mainpaper}>
         <Stack className={styles.componentstack} spacing={3}>
           <Typography fontSize={32}>Upload a file</Typography>
+          {error && <Alert severity="error">{error}</Alert>}
           <TextField
             type="file"
             variant="standard"
             title="Upload a textfile"
             onChange={handleFileChange}
             inputProps={{ accept: "image/*" }}
-            error={error}
+            error={!!error}
           />
-          <Button
+          <LoadingButton
             disabled={disabled}
             variant="contained"
             onClick={() => send()}
+            loading={loading}
           >
             Upload
-          </Button>
+          </LoadingButton>
         </Stack>
       </Paper>
-      <Dialog open={dialogOpen} setOpen={setDialogOpen} error={error}>
-        <>{content}</>
-      </Dialog>
+      <Dialog open={dialogOpen} setOpen={setDialogOpen} content={content} />
     </>
   );
 };

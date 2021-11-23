@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 import Paper from "@mui/material/Paper";
-import { Button, Stack, TextField, Typography } from "@mui/material";
-import Input from "@mui/material/Input";
+import { Stack, TextField, Typography, Alert } from "@mui/material";
 import styles from "styles/UploadComponent.module.css";
 import { stringUpload } from "src/api";
+import { LoadingButton } from "@mui/lab";
 
 const StringUpload = () => {
   const [content, setContent] = useState<string>("");
@@ -11,12 +11,26 @@ const StringUpload = () => {
   const [widthError, setWidthError] = useState(false);
   const [height, setHeight] = useState<string>("");
   const [heightError, setHeightError] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const disabled = !content || !width || !height || widthError || heightError;
 
   const send = useCallback(() => {
+    setError("");
+    setLoading(true);
     if (!disabled) {
-      stringUpload({ content, width: Number(width), height: Number(height) });
+      stringUpload({
+        content,
+        width: Number(width),
+        height: Number(height),
+      })
+        .catch((e) => {
+          setError(e?.message);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   }, [content, disabled, height, width]);
 
@@ -24,7 +38,7 @@ const StringUpload = () => {
     <Paper className={styles.mainpaper}>
       <Stack className={styles.componentstack} spacing={3}>
         <Typography fontSize={32}>Generate an image</Typography>
-
+        {error && <Alert severity="error">{error}</Alert>}
         <Stack spacing={1}>
           <TextField
             label="Content"
@@ -68,9 +82,14 @@ const StringUpload = () => {
           />
         </Stack>
 
-        <Button disabled={disabled} variant="contained" onClick={() => send()}>
+        <LoadingButton
+          disabled={disabled}
+          loading={loading}
+          variant="contained"
+          onClick={() => send()}
+        >
           Upload
-        </Button>
+        </LoadingButton>
       </Stack>
     </Paper>
   );
