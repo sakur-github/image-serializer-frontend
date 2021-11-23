@@ -6,10 +6,12 @@
 .mainpaper {
   margin-bottom: 2rem;
   height: fit-content;
+  width: 100%;
 }
 
 @media (min-width: 768px) {
   .mainpaper {
     margin: 0 1rem;
+    width: unset;
   }
 }
