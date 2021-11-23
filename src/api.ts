@@ -1,4 +1,3 @@
-import fileDownload from "js-file-download";
 import { backendUrl } from "src/constants";
 import {
   FileUploadInput,
@@ -12,8 +11,13 @@ export async function uploadString(input: StringUploadInput) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
-  const data = await response.blob();
-  fileDownload(data, "image.png");
+  if (response.ok) {
+    const blob = await response.blob();
+    return { blob };
+  } else {
+    const error = await response.json();
+    throw new Error(error?.message);
+  }
 }
 
 export async function uploadFile(

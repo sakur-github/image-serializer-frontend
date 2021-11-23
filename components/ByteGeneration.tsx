@@ -1,10 +1,12 @@
-import { useCallback, ChangeEvent, useState } from "react";
+import React, { useCallback, ChangeEvent, useState } from "react";
+import Image from "next/image";
 import Paper from "@mui/material/Paper";
-import { Stack, TextField, Typography, Alert } from "@mui/material";
+import { Stack, TextField, Typography, Alert, Button } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import styles from "styles/UploadComponent.module.css";
 import { uploadFile } from "src/api";
-import Dialog from "./Dialog";
-import { LoadingButton } from "@mui/lab";
+import ContentDialog from "./ContentDialog";
+import ExampleDialog from "./ImageDialog";
 
 const ByteGeneration = () => {
   const [file, setFile] = useState<File>();
@@ -12,6 +14,7 @@ const ByteGeneration = () => {
   const [content, setContent] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [exampleOpen, setExampleOpen] = useState(false);
   const disabled = !file;
 
   const handleFileChange = useCallback(
@@ -62,9 +65,38 @@ const ByteGeneration = () => {
           >
             Generate
           </LoadingButton>
+          <Stack>
+            <Typography>
+              Want to try it out but don&apos;t have any valid images?
+            </Typography>
+            <Typography
+              component="button"
+              style={{ width: "fit-content" }}
+              onClick={() => setExampleOpen(true)}
+            >
+              Try out this <span style={{ color: "#1976d2" }}>example</span>
+            </Typography>
+          </Stack>
         </Stack>
       </Paper>
-      <Dialog open={dialogOpen} setOpen={setDialogOpen} content={content} />
+      <ContentDialog
+        open={dialogOpen}
+        setOpen={setDialogOpen}
+        content={content}
+      />
+      <ExampleDialog
+        open={exampleOpen}
+        setOpen={setExampleOpen}
+        image={{ name: "example.png", src: "/example.png" }}
+        title="Example"
+      >
+        <Image
+          src="/example.png"
+          width={128 * 5}
+          height={32 * 5}
+          alt="Example image of a mountain"
+        />
+      </ExampleDialog>
     </>
   );
 };
