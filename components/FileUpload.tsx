@@ -44,7 +44,7 @@ const FileUpload = () => {
     <>
       <Paper className={styles.mainpaper}>
         <Stack className={styles.componentstack} spacing={3}>
-          <Typography fontSize={32}>Upload a file</Typography>
+          <Typography fontSize={32}>Upload an image</Typography>
           {error && <Alert severity="error">{error}</Alert>}
           <TextField
             type="file"
