@@ -15,10 +15,15 @@ export async function stringUpload(input: StringUploadInput) {
 export async function fileUpload(input: FileUploadInput) {
   const formData = new FormData();
   formData.append("file", input.file);
-  const response = await fetch(`${backendUrl}/upload/file`, {
-    method: "POST",
-    body: formData,
-  });
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch(`${backendUrl}/upload/file`, {
+      method: "POST",
+      body: formData,
+    });
+    const data = await response.json();
+    return data;
+  } catch (e: any) {
+    const message = e?.message;
+    return { message };
+  }
 }
