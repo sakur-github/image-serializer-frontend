@@ -1,5 +1,6 @@
 import React, { useCallback, ChangeEvent, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Paper from "@mui/material/Paper";
 import { Stack, TextField, Typography, Alert, Button } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
@@ -54,7 +55,11 @@ const ByteGeneration = () => {
     <>
       <Paper className={styles.mainpaper}>
         <Stack className={styles.componentstack} spacing={3}>
-          <Typography fontSize={32}>Generate bytes</Typography>
+          <Link href="/generate/bytes" passHref>
+            <a>
+              <Typography fontSize={32}>Generate bytes</Typography>
+            </a>
+          </Link>
           {error && <Alert severity="error">{error}</Alert>}
           <TextField
             type="file"

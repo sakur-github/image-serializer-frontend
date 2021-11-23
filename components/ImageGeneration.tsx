@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
-import Paper from "@mui/material/Paper";
-import { Stack, TextField, Typography, Alert } from "@mui/material";
+import Link from "next/link";
+import { Stack, TextField, Typography, Alert, Paper } from "@mui/material";
 import styles from "styles/UploadComponent.module.css";
 import { uploadString } from "src/api";
 import { example } from "src/example";
@@ -47,7 +47,11 @@ const ImageGeneration = () => {
     <>
       <Paper className={styles.mainpaper}>
         <Stack className={styles.componentstack} spacing={3}>
-          <Typography fontSize={32}>Generate an image</Typography>
+          <Link href="/generate/image" passHref>
+            <a>
+              <Typography fontSize={32}>Generate an image</Typography>
+            </a>
+          </Link>
           {error && <Alert severity="error">{error}</Alert>}
           <Stack spacing={1}>
             <TextField
