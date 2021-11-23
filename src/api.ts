@@ -20,5 +20,5 @@ export async function fileUpload(input: FileUploadInput) {
     body: formData,
   });
   const data = await response.json();
-  return data?.content;
+  return data;
 }

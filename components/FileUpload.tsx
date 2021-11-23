@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, ChangeEvent, useState } from "react";
 import Paper from "@mui/material/Paper";
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import styles from "styles/UploadComponent.module.css";
@@ -8,14 +8,29 @@ import Dialog from "./Dialog";
 
 const FileUpload = () => {
   const [file, setFile] = useState<File>();
+  const [error, setError] = useState(false);
   const [content, setContent] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const disabled = !file;
 
+  const handleFileChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const input = event.target as HTMLInputElement;
+      if (input?.files) {
+        setFile(input.files[0]);
+      }
+      setError(false);
+    },
+    []
+  );
+
   const send = useCallback(() => {
     if (!disabled) {
       fileUpload({ file }).then((data) => {
-        setContent(data);
+        if (data?.message) {
+          setError(true);
+        }
+        setContent(data?.message || data?.content);
         setDialogOpen(true);
       });
     }
@@ -30,13 +45,9 @@ const FileUpload = () => {
             type="file"
             variant="standard"
             title="Upload a textfile"
-            onChange={(event) => {
-              const input = event.target as HTMLInputElement;
-              if (input?.files) {
-                setFile(input.files[0]);
-              }
-            }}
+            onChange={handleFileChange}
             inputProps={{ accept: "image/*" }}
+            error={error}
           />
           <Button
             disabled={disabled}
@@ -47,7 +58,7 @@ const FileUpload = () => {
           </Button>
         </Stack>
       </Paper>
-      <Dialog open={dialogOpen} setOpen={setDialogOpen}>
+      <Dialog open={dialogOpen} setOpen={setDialogOpen} error={error}>
         <>{content}</>
       </Dialog>
     </>
