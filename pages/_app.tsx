@@ -1,5 +1,4 @@
 import "../styles/globals.css";
-import type { AppProps } from "next/app";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "layout/theme";
 import { CacheProvider } from "@emotion/react";
@@ -7,9 +6,10 @@ import createEmotionCache from "layout/createEmotionCache";
 
 const clientSideEmotionCache = createEmotionCache();
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp(props: any) {
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   return (
-    <CacheProvider value={clientSideEmotionCache}>
+    <CacheProvider value={emotionCache}>
       <ThemeProvider theme={theme}>
         <Component {...pageProps} />
       </ThemeProvider>
