@@ -36,6 +36,7 @@ const FileUpload = () => {
                 setFile(input.files[0]);
               }
             }}
+            inputProps={{ accept: "image/*" }}
           />
           <Button
             disabled={disabled}
