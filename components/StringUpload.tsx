@@ -7,9 +7,9 @@ import styles from "styles/UploadComponent.module.css";
 
 const StringUpload: NextPage = () => {
   const [string, setString] = useState<String>("");
-  const [width, setWidth] = useState<String>("0");
+  const [width, setWidth] = useState<String>("");
   const [widthError, setWidthError] = useState(false);
-  const [height, setHeight] = useState<String>("0");
+  const [height, setHeight] = useState<String>("");
   const [heightError, setHeightError] = useState(false);
   const disabled = !string || !width || !height || widthError || heightError;
   return (
@@ -33,7 +33,7 @@ const StringUpload: NextPage = () => {
           <TextField
             variant="standard"
             label="Width"
-            helperText={width ? "Must be a number" : ""}
+            helperText={widthError ? "Must be a number" : ""}
             value={width}
             error={widthError}
             onChange={(e) => {
