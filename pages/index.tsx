@@ -10,7 +10,6 @@ import StringUpload from "components/StringUpload";
 
 const Home: NextPage = () => {
   const [file, setFile] = useState<File>();
-  console.log(file);
   return (
     <div className={styles.container}>
       <Head>
@@ -20,7 +19,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <Stack className={styles.mainstack}>
+        <Stack sx={{ alignItems: "center", flexDirection: { sm: "row" } }}>
           <FileUpload />
           <StringUpload />
         </Stack>

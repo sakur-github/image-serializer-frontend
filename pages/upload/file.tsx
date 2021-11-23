@@ -1,15 +1,9 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
-import Paper from "@mui/material/Paper";
-import { Button, Stack, Typography } from "@mui/material";
-import Input from "@mui/material/Input";
 import styles from "styles/Home.module.css";
 import FileUpload from "components/FileUpload";
 
 const Home: NextPage = () => {
-  const [file, setFile] = useState<File>();
-  console.log(file);
   return (
     <div className={styles.container}>
       <Head>

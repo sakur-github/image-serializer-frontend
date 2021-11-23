@@ -11,15 +11,3 @@
   justify-content: center;
   align-items: center;
 }
-
-.mainstack {
-  display: flex;
-  flex-direction: column;
-}
-
-@media (min-width: 768px) {
-  .mainstack {
-    flex-direction: row;
-    align-items: center;
-  }
-}
