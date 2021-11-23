@@ -28,8 +28,7 @@ const ImageGeneration = () => {
         width: Number(width),
         height: Number(height),
       })
-        .then((data) => {
-          const { blob, message } = data;
+        .then(({ blob }) => {
           if (blob) {
             setImage(URL.createObjectURL(blob));
             setDialogOpen(true);
