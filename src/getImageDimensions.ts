@@ -7,5 +7,9 @@ export function getImageDimensions(
     fn({ width: this.naturalWidth, height: this.naturalHeight });
     this.remove();
   });
-  img.src = URL.createObjectURL(src);
+  if (typeof src !== "string") {
+    img.src = URL.createObjectURL(src);
+  } else {
+    img.src = src;
+  }
 }
