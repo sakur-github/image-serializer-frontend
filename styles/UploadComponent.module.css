@@ -1,0 +1,16 @@
+.componentstack {
+  padding: 2rem;
+  min-width: 25vw;
+}
+
+.mainpaper {
+  width: 100%;
+  margin-bottom: 2rem;
+  height: fit-content;
+}
+
+@media (min-width: 768px) {
+  .mainpaper {
+    margin: 0 1rem;
+  }
+}
