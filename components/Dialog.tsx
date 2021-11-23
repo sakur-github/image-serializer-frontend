@@ -1,10 +1,11 @@
-import { Button, Stack, Tooltip } from "@mui/material";
+import { Stack, Tooltip } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { LoadingButton } from "@mui/lab";
 
 export default function ContentDialog({
   content,
@@ -38,7 +39,8 @@ export default function ContentDialog({
             disableTouchListener
             title={copyToClipboardText}
           >
-            <Button
+            <LoadingButton
+              loading={loading}
               onClick={() => {
                 setLoading(true);
                 navigator.clipboard
@@ -51,12 +53,12 @@ export default function ContentDialog({
                   })
                   .finally(() => {
                     setLoading(false);
-                    setTimeout(() => setCopyToClipboardText(""), 2500);
+                    setTimeout(() => setCopyToClipboardText(""), 1000);
                   });
               }}
             >
               <ContentCopyIcon />
-            </Button>
+            </LoadingButton>
           </Tooltip>
         </Stack>
         <DialogContent>
