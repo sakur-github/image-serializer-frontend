@@ -3,8 +3,8 @@ import Paper from "@mui/material/Paper";
 import { Stack, TextField, Typography, Alert } from "@mui/material";
 import styles from "styles/UploadComponent.module.css";
 import { uploadString } from "src/api";
-import { LoadingButton } from "@mui/lab";
 import { example } from "src/example";
+import { LoadingButton } from "@mui/lab";
 import ImageDialog from "./ImageDialog";
 
 const ImageGeneration = () => {

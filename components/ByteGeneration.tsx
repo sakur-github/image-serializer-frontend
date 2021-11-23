@@ -7,6 +7,7 @@ import styles from "styles/UploadComponent.module.css";
 import { uploadFile } from "src/api";
 import ContentDialog from "./ContentDialog";
 import ExampleDialog from "./ImageDialog";
+import { getImageDimensions } from "src/getImageDimensions";
 
 const ByteGeneration = () => {
   const [file, setFile] = useState<File>();
@@ -15,12 +16,18 @@ const ByteGeneration = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [exampleOpen, setExampleOpen] = useState(false);
+  const [dimensions, setDimensions] = useState<
+    undefined | { width: number; height: number }
+  >();
   const disabled = !file;
 
   const handleFileChange = useCallback(
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const input = event.target as HTMLInputElement;
       if (input?.files) {
+        getImageDimensions(input.files[0], (dimensions) => {
+          setDimensions(dimensions);
+        });
         setFile(input.files[0]);
       }
       setError("");
@@ -65,6 +72,9 @@ const ByteGeneration = () => {
           >
             Generate
           </LoadingButton>
+          {dimensions && (
+            <Typography>{`Dimensions: ${dimensions.width}px*${dimensions.height}px`}</Typography>
+          )}
           <Stack>
             <Typography>
               Want to try it out but don&apos;t have any valid images?
