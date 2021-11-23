@@ -1,8 +1,12 @@
 import fileDownload from "js-file-download";
 import { backendUrl } from "src/constants";
-import { FileUploadInput, StringUploadInput } from "src/types";
+import {
+  FileUploadInput,
+  FileUploadResult,
+  StringUploadInput,
+} from "src/types";
 
-export async function stringUpload(input: StringUploadInput) {
+export async function uploadString(input: StringUploadInput) {
   const response = await fetch(`${backendUrl}/upload/string`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -12,7 +16,9 @@ export async function stringUpload(input: StringUploadInput) {
   fileDownload(data, "image.png");
 }
 
-export async function fileUpload(input: FileUploadInput) {
+export async function uploadFile(
+  input: FileUploadInput
+): Promise<FileUploadResult> {
   const formData = new FormData();
   formData.append("file", input.file);
   try {

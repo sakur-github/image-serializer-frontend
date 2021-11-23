@@ -2,10 +2,10 @@ import { useCallback, useState } from "react";
 import Paper from "@mui/material/Paper";
 import { Stack, TextField, Typography, Alert } from "@mui/material";
 import styles from "styles/UploadComponent.module.css";
-import { stringUpload } from "src/api";
+import { uploadString } from "src/api";
 import { LoadingButton } from "@mui/lab";
 
-const StringUpload = () => {
+const ImageGeneration = () => {
   const [content, setContent] = useState<string>("");
   const [width, setWidth] = useState<string>("");
   const [widthError, setWidthError] = useState(false);
@@ -20,7 +20,7 @@ const StringUpload = () => {
     setError("");
     setLoading(true);
     if (!disabled) {
-      stringUpload({
+      uploadString({
         content,
         width: Number(width),
         height: Number(height),
@@ -88,11 +88,11 @@ const StringUpload = () => {
           variant="contained"
           onClick={() => send()}
         >
-          Upload
+          Generate
         </LoadingButton>
       </Stack>
     </Paper>
   );
 };
 
-export default StringUpload;
+export default ImageGeneration;

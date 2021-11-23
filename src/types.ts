@@ -7,3 +7,8 @@ export type StringUploadInput = {
 export type FileUploadInput = {
   file: File;
 };
+
+export type FileUploadResult = {
+  message?: string;
+  content?: string;
+};

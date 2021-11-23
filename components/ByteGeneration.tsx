@@ -1,12 +1,12 @@
 import { useCallback, ChangeEvent, useState } from "react";
 import Paper from "@mui/material/Paper";
-import { Button, Stack, TextField, Typography, Alert } from "@mui/material";
+import { Stack, TextField, Typography, Alert } from "@mui/material";
 import styles from "styles/UploadComponent.module.css";
-import { fileUpload } from "src/api";
+import { uploadFile } from "src/api";
 import Dialog from "./Dialog";
 import { LoadingButton } from "@mui/lab";
 
-const FileUpload = () => {
+const ByteGeneration = () => {
   const [file, setFile] = useState<File>();
   const [error, setError] = useState("");
   const [content, setContent] = useState("");
@@ -28,12 +28,12 @@ const FileUpload = () => {
   const send = useCallback(() => {
     if (!disabled) {
       setLoading(true);
-      fileUpload({ file }).then((data) => {
+      uploadFile({ file }).then((data) => {
         setLoading(false);
         if (data?.message) {
           setError(data.message);
-        } else {
-          setContent(data?.content);
+        } else if (data?.content) {
+          setContent(data.content);
           setDialogOpen(true);
         }
       });
@@ -44,7 +44,7 @@ const FileUpload = () => {
     <>
       <Paper className={styles.mainpaper}>
         <Stack className={styles.componentstack} spacing={3}>
-          <Typography fontSize={32}>Upload an image</Typography>
+          <Typography fontSize={32}>Generate bytes</Typography>
           {error && <Alert severity="error">{error}</Alert>}
           <TextField
             type="file"
@@ -60,7 +60,7 @@ const FileUpload = () => {
             onClick={() => send()}
             loading={loading}
           >
-            Upload
+            Generate
           </LoadingButton>
         </Stack>
       </Paper>
@@ -69,4 +69,4 @@ const FileUpload = () => {
   );
 };
 
-export default FileUpload;
+export default ByteGeneration;
