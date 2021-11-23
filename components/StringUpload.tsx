@@ -23,15 +23,15 @@ const StringUpload = () => {
   return (
     <Paper className={styles.mainpaper}>
       <Stack className={styles.componentstack} spacing={3}>
-        <Typography fontSize={32}>Upload a string</Typography>
+        <Typography fontSize={32}>Generate an image</Typography>
 
         <Stack spacing={1}>
           <TextField
-            label="Template"
+            label="Content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             multiline
-            title="Template"
+            title="Content"
             minRows={8}
             maxRows={8}
             inputProps={{ style: { minHeight: "217px", maxHeight: "217px" } }}
@@ -57,12 +57,12 @@ const StringUpload = () => {
           <TextField
             variant="standard"
             label="Height"
-            helperText={heightError ? "Must be an integer" : ""}
+            helperText={heightError ? "Must be a multiple of 8" : ""}
             value={height.toString()}
             error={heightError}
             onChange={(e) => {
               const number = Number(e.target.value);
-              setHeightError(!Number.isInteger(number));
+              setHeightError(number % 8 !== 0);
               setHeight(e.target.value);
             }}
           />

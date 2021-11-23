@@ -13,6 +13,7 @@ export default async function apiProxyHandler(
     await fetch(fetchUrl, {
       method: req.method,
       headers,
+      body: req.body,
     })
       .then((response) => {
         if (response.ok) {
