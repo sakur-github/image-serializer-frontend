@@ -2,7 +2,7 @@ import { Crop } from "react-image-crop";
 
 export function getCroppedImg(image: HTMLImageElement, crop: Crop) {
   const canvas = document.createElement("canvas");
-  const scaleX = 1;
+  const scaleX = image.naturalHeight / image.height;
   const scaleY = image.naturalHeight / image.height;
   canvas.width = crop.width;
   canvas.height = crop.height;
