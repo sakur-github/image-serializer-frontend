@@ -7,9 +7,6 @@ import SerializeImage from "components/SerializeImage";
 import { useEffect } from "react";
 
 const Home: NextPage = () => {
-  useEffect(() => {
-    fetch("/api/ping");
-  }, []);
   return (
     <div className={styles.container}>
       <Head>

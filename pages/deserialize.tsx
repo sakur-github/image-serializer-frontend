@@ -5,9 +5,6 @@ import DeserializeImage from "components/DeserializeImage";
 import { useEffect } from "react";
 
 const Home: NextPage = () => {
-  useEffect(() => {
-    fetch("/api/ping");
-  }, []);
   return (
     <div className={styles.container}>
       <Head>
