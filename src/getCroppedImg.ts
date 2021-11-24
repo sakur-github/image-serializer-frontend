@@ -4,8 +4,8 @@ export function getCroppedImg(image: HTMLImageElement, crop: Crop) {
   const canvas = document.createElement("canvas");
   const scaleX = image.naturalHeight / image.height;
   const scaleY = image.naturalHeight / image.height;
-  canvas.width = crop.width;
-  canvas.height = crop.height;
+  canvas.width = Math.round(crop.width);
+  canvas.height = Math.round(crop.height);
   const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
   /*   // New lines to be added

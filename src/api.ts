@@ -6,7 +6,7 @@ import {
 } from "src/types";
 
 export async function uploadBytes(input: StringUploadInput) {
-  const response = await fetch(`/api/upload/string`, {
+  const response = await fetch(`/api/deserialize`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
@@ -26,10 +26,13 @@ export async function uploadImage(
   const formData = new FormData();
   formData.append("file", input.file);
   try {
-    const response = await fetch(`/api/upload/file`, {
-      method: "POST",
-      body: formData,
-    });
+    const response = await fetch(
+      `/api/serialize?smoothBrightness=${input.smoothBrightness}`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
     const data = await response.json();
     return data;
   } catch (e: any) {

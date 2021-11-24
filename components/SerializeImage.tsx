@@ -1,7 +1,14 @@
 import React, { useCallback, ChangeEvent, useState, useEffect } from "react";
 import Link from "next/link";
 import Paper from "@mui/material/Paper";
-import { Stack, TextField, Typography, Alert, Button } from "@mui/material";
+import {
+  Stack,
+  TextField,
+  Typography,
+  Alert,
+  Checkbox,
+  FormControlLabel,
+} from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import styles from "styles/UploadComponent.module.css";
 import { uploadImage } from "src/api";
@@ -18,7 +25,6 @@ const SerializeImage = () => {
   const [content, setContent] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [exampleOpen, setExampleOpen] = useState(false);
   const [dimensions, setDimensions] = useState<
     undefined | { width: number; height: number }
   >();
@@ -27,6 +33,7 @@ const SerializeImage = () => {
   >();
   const [cropFile, setCropFile] = useState<string>("");
   const [crop, setCrop] = useState<Partial<Crop>>({});
+  const [smoothBrightness, setSmoothBrightness] = useState(false);
   const disabled = !file || !!error;
 
   useEffect(() => {
@@ -88,7 +95,7 @@ const SerializeImage = () => {
       getFileImage(file, (image) => {
         getCroppedImg(image, crop as Crop).then((blob) => {
           const fileFromBlob = new File([blob as Blob], "cropped.jpeg");
-          uploadImage({ file: fileFromBlob }).then((data) => {
+          uploadImage({ file: fileFromBlob, smoothBrightness }).then((data) => {
             setLoading(false);
             if (data?.message) {
               setError(data.message);
@@ -100,7 +107,7 @@ const SerializeImage = () => {
         });
       });
     }
-  }, [crop, disabled, file]);
+  }, [crop, disabled, file, smoothBrightness]);
 
   return (
     <>
@@ -138,12 +145,25 @@ const SerializeImage = () => {
               <Typography>{`width: ${cropDimensions.width} | height:${cropDimensions.height}`}</Typography>
             </Stack>
           )}
+
+          <FormControlLabel
+            style={{ marginTop: "auto" }}
+            control={
+              <Checkbox
+                checked={smoothBrightness}
+                onChange={() => {
+                  setSmoothBrightness((state) => !state);
+                }}
+              />
+            }
+            label="Smooth Brightness"
+          />
+
           <LoadingButton
             disabled={disabled}
             variant="contained"
             onClick={() => send()}
             loading={loading}
-            style={{ marginTop: "auto" }}
           >
             Serialize
           </LoadingButton>

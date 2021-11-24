@@ -6,6 +6,7 @@ export type StringUploadInput = {
 
 export type FileUploadInput = {
   file: File;
+  smoothBrightness: boolean;
 };
 
 export type FileUploadResult = {
