@@ -126,7 +126,7 @@ const SerializeImage = () => {
           </LoadingButton>
           {cropDimensions?.height && (
             <Stack spacing={1}>
-              <Typography>{`Dimensions: ${cropDimensions.width}px*${cropDimensions.height}px`}</Typography>
+              <Typography>{`width: ${cropDimensions.width} | height:${cropDimensions.height}`}</Typography>
               {error && <Alert severity="error">{error}</Alert>}
               {!error && (
                 <Alert severity="success">
