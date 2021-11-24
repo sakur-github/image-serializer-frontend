@@ -145,9 +145,7 @@ const SerializeImage = () => {
             Deserialize
           </LoadingButton>
           <Stack>
-            <Typography>
-              Want to try it out but don&apos;t have any valid images?
-            </Typography>
+            <Typography>Don&apos;t have an image?</Typography>
             <Typography
               component="button"
               style={{ width: "fit-content" }}
