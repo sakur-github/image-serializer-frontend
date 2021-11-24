@@ -2,8 +2,12 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "styles/Home.module.css";
 import SerializeImage from "components/SerializeImage";
+import { useEffect } from "react";
 
 const Home: NextPage = () => {
+  useEffect(() => {
+    fetch("/api/ping");
+  }, []);
   return (
     <div className={styles.container}>
       <Head>

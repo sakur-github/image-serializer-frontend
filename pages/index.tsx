@@ -4,8 +4,12 @@ import styles from "../styles/Home.module.css";
 import { Stack } from "@mui/material";
 import DeserializeImage from "components/DeserializeImage";
 import SerializeImage from "components/SerializeImage";
+import { useEffect } from "react";
 
 const Home: NextPage = () => {
+  useEffect(() => {
+    fetch("/api/ping");
+  }, []);
   return (
     <div className={styles.container}>
       <Head>
