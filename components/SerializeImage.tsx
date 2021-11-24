@@ -1,137 +1,171 @@
-import { useCallback, useState } from "react";
+import React, { useCallback, ChangeEvent, useState, useEffect } from "react";
 import Link from "next/link";
-import { Stack, TextField, Typography, Alert, Paper } from "@mui/material";
-import styles from "styles/UploadComponent.module.css";
-import { uploadBytes } from "src/api";
-import { example } from "src/example";
+import Paper from "@mui/material/Paper";
+import { Stack, TextField, Typography, Alert, Button } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import ImageDialog from "./ImageDialog";
+import styles from "styles/UploadComponent.module.css";
+import { uploadImage } from "src/api";
+import ContentDialog from "./ContentDialog";
+import { getImageDimensions } from "src/getImageDimensions";
+import ReactCrop, { Crop } from "react-image-crop";
+import { getCroppedImg } from "src/getCroppedImg";
+import { getFileImage } from "src/getFileImage";
+import { srcToFile } from "src/srcToFile";
 
 const SerializeImage = () => {
-  const [content, setContent] = useState<string>("");
-  const [width, setWidth] = useState<string>("");
-  const [widthError, setWidthError] = useState(false);
-  const [height, setHeight] = useState<string>("");
-  const [heightError, setHeightError] = useState(false);
+  const [file, setFile] = useState<File>();
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState("");
+  const [content, setContent] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
-  const disabled = !content || !width || !height || widthError || heightError;
+  const [loading, setLoading] = useState(false);
+  const [exampleOpen, setExampleOpen] = useState(false);
+  const [dimensions, setDimensions] = useState<
+    undefined | { width: number; height: number }
+  >();
+  const [cropDimensions, setCropDimensions] = useState<
+    undefined | { width: number | undefined; height: number | undefined }
+  >();
+  const [cropFile, setCropFile] = useState<string>("");
+  const [crop, setCrop] = useState<Partial<Crop>>({});
+  const disabled = !file || !!error;
+
+  useEffect(() => {
+    if (crop) {
+      setCropDimensions({ width: crop.width, height: crop.height });
+    }
+  }, [crop]);
+
+  useEffect(() => {
+    if (file) {
+      getImageDimensions(file, (dimensions) => {
+        setDimensions(dimensions);
+        let closestMultipleOf8 = dimensions.height;
+        while (closestMultipleOf8 % 8 !== 0) {
+          closestMultipleOf8 -= 1;
+        }
+        setCrop({
+          width: dimensions.width,
+          height: closestMultipleOf8,
+        });
+      });
+      setCropFile(URL.createObjectURL(file));
+    }
+  }, [file]);
+
+  useEffect(() => {
+    if (cropDimensions?.height) {
+      if (cropDimensions.height % 8 !== 0) {
+        let closestMultipleOf8 = cropDimensions.height;
+        while (closestMultipleOf8 % 8 !== 0) {
+          closestMultipleOf8 -= 1;
+        }
+        setError(
+          `Height needs to be a multiple of 8. Try ${closestMultipleOf8}px`
+        );
+      } else {
+        setError("");
+      }
+    }
+  }, [cropDimensions]);
+
+  const handleFileChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const input = event.target as HTMLInputElement;
+      if (input?.files) {
+        setFile(input.files[0]);
+      }
+      setError("");
+    },
+    []
+  );
 
   const send = useCallback(() => {
-    setError("");
-    setLoading(true);
-    if (!disabled) {
-      uploadBytes({
-        content,
-        width: Number(width),
-        height: Number(height),
-      })
-        .then(({ blob }) => {
-          if (blob) {
-            setImage(URL.createObjectURL(blob));
-            setDialogOpen(true);
-          }
-        })
-        .catch((e) => {
-          setError(e?.message);
-        })
-        .finally(() => {
-          setLoading(false);
+    if (!disabled && crop) {
+      setLoading(true);
+      getFileImage(file, (image) => {
+        getCroppedImg(image, crop as Crop).then((blob) => {
+          const fileFromBlob = new File([blob as Blob], "cropped.jpeg");
+          uploadImage({ file: fileFromBlob }).then((data) => {
+            setLoading(false);
+            if (data?.message) {
+              setError(data.message);
+            } else if (data?.content) {
+              setContent(data.content);
+              setDialogOpen(true);
+            }
+          });
         });
+      });
     }
-  }, [content, disabled, height, width]);
+  }, [crop, disabled, file]);
 
   return (
     <>
       <Paper className={styles.mainpaper}>
         <Stack className={styles.componentstack} spacing={3}>
-          <Link href="/serialize/image" passHref>
+          <Link href="/serialize/bytes" passHref>
             <a>
-              <Typography fontSize={32}>Deserialize an image</Typography>
+              <Typography fontSize={32}>Serialize an image</Typography>
             </a>
           </Link>
-          {error && <Alert severity="error">{error}</Alert>}
-          <Stack spacing={1}>
-            <TextField
-              label="Content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              multiline
-              title="Content"
-              minRows={8}
-              maxRows={8}
-              inputProps={{ style: { minHeight: "217px", maxHeight: "217px" } }}
-            />
-          </Stack>
-
-          <Stack spacing={1}>
-            <TextField
-              variant="standard"
-              label="Width"
-              helperText={widthError ? "Must be an integer" : ""}
-              value={width}
-              error={widthError}
-              onChange={(e) => {
-                const number = Number(e.target.value);
-                setWidthError(!Number.isInteger(number));
-                setWidth(e.target.value);
-              }}
-            />
-          </Stack>
-
-          <Stack spacing={1}>
-            <TextField
-              variant="standard"
-              label="Height"
-              helperText={heightError ? "Must be a multiple of 8" : ""}
-              value={height.toString()}
-              error={heightError}
-              onChange={(e) => {
-                const number = Number(e.target.value);
-                setHeightError(number % 8 !== 0);
-                setHeight(e.target.value);
-              }}
-            />
-          </Stack>
-
+          <TextField
+            type="file"
+            variant="standard"
+            title="Upload a textfile"
+            onChange={handleFileChange}
+            inputProps={{ accept: "image/*" }}
+            error={!!error}
+          />
           <LoadingButton
             disabled={disabled}
-            loading={loading}
             variant="contained"
             onClick={() => send()}
+            loading={loading}
           >
-            Serialize
+            Deserialize
           </LoadingButton>
-
-          <Stack>
-            <Typography>Don&apos;t know what to put in?</Typography>
+          {cropDimensions?.height && (
+            <Stack spacing={1}>
+              <Typography>{`Dimensions: ${cropDimensions.width}px*${cropDimensions.height}px`}</Typography>
+              {error && <Alert severity="error">{error}</Alert>}
+              {!error && (
+                <Alert severity="success">
+                  You can crop this image to fit your needs
+                </Alert>
+              )}
+              <ReactCrop
+                style={{ width: dimensions?.width, height: dimensions?.height }}
+                maxWidth={dimensions?.width}
+                maxHeight={dimensions?.height}
+                src={cropFile}
+                crop={crop}
+                onChange={(newCrop) => setCrop(newCrop)}
+              />
+            </Stack>
+          )}
+          <Stack style={{ marginTop: "auto" }}>
+            <Typography>
+              Want to try it out but don&apos;t have any valid images?
+            </Typography>
             <Typography
               component="button"
               style={{ width: "fit-content" }}
-              onClick={() => {
-                setContent(example.content);
-                setWidth(example.width);
-                setHeight(example.height);
-              }}
+              onClick={() =>
+                srcToFile("/example.png").then((file) => {
+                  setFile(file);
+                })
+              }
             >
               Try out this <span style={{ color: "#1976d2" }}>example</span>
             </Typography>
           </Stack>
         </Stack>
       </Paper>
-      <ImageDialog
+      <ContentDialog
         open={dialogOpen}
         setOpen={setDialogOpen}
-        image={{ name: "serialized.png", src: image }}
-      >
-        <img
-          src={image}
-          alt="Your serialized image"
-          title="Your serialized image"
-        />
-      </ImageDialog>{" "}
+        content={content}
+      />
     </>
   );
 };

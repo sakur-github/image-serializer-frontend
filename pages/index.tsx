@@ -18,9 +18,9 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <Stack sx={{ alignItems: "center", flexDirection: { sm: "row" } }}>
-          <DeserializeImage />
+        <Stack sx={{ flexDirection: { sm: "row" } }}>
           <SerializeImage />
+          <DeserializeImage />
         </Stack>
       </main>
     </div>
