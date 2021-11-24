@@ -10,7 +10,9 @@ const clientSideEmotionCache = createEmotionCache();
 
 function MyApp(props: any) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+
   usePing();
+
   return (
     <CacheProvider value={emotionCache}>
       <ThemeProvider theme={theme}>

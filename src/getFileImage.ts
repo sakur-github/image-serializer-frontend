@@ -1,7 +1,10 @@
-export function getFileImage(file: File, fn: (img: HTMLImageElement) => any) {
+export function getFileImage(file: File): Promise<HTMLImageElement> {
   const img = new Image();
-  img.addEventListener("load", function () {
-    fn(this);
-  });
   img.src = URL.createObjectURL(file);
+  return new Promise((resolve) => {
+    img.addEventListener("load", function () {
+      resolve(this);
+      this.remove();
+    });
+  });
 }

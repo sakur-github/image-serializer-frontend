@@ -36,18 +36,28 @@ const SerializeImage = () => {
   const [smoothBrightness, setSmoothBrightness] = useState(false);
   const disabled = !file || !!error;
 
+  const onCrop = useCallback(() => {
+    if (crop?.height && crop?.height % 8 !== 0) {
+      setCrop({ width: cropDimensions?.width, height: cropDimensions?.height });
+    }
+  }, [crop, cropDimensions?.height, cropDimensions?.width]);
+
   useEffect(() => {
-    if (crop) {
+    if (crop?.height) {
+      let closestMultipleOf8 = Math.round(crop.height);
+      while (closestMultipleOf8 % 8 !== 0) {
+        closestMultipleOf8 -= 1;
+      }
       setCropDimensions({
         width: crop.width && Math.round(crop.width),
-        height: crop.height && Math.round(crop.height),
+        height: crop.height && closestMultipleOf8,
       });
     }
   }, [crop]);
 
   useEffect(() => {
     if (file) {
-      getImageDimensions(file, (dimensions) => {
+      getImageDimensions(file).then((dimensions) => {
         setDimensions(dimensions);
         let closestMultipleOf8 = dimensions.height;
         while (closestMultipleOf8 % 8 !== 0) {
@@ -92,7 +102,7 @@ const SerializeImage = () => {
   const send = useCallback(() => {
     if (!disabled && crop) {
       setLoading(true);
-      getFileImage(file, (image) => {
+      getFileImage(file).then((image) => {
         getCroppedImg(image, crop as Crop).then((blob) => {
           const fileFromBlob = new File([blob as Blob], "cropped.jpeg");
           uploadImage({ file: fileFromBlob, smoothBrightness }).then((data) => {
@@ -129,18 +139,16 @@ const SerializeImage = () => {
           {cropDimensions?.height && (
             <Stack spacing={1}>
               {error && <Alert severity="error">{error}</Alert>}
-              {!error && (
-                <Alert severity="success">
-                  You can crop this image to fit your needs
-                </Alert>
-              )}
               <ReactCrop
                 style={{ width: dimensions?.width, height: dimensions?.height }}
                 maxWidth={dimensions?.width}
                 maxHeight={dimensions?.height}
+                minHeight={8}
+                minWidth={8}
                 src={cropFile}
                 crop={crop}
                 onChange={(newCrop) => setCrop(newCrop)}
+                onComplete={() => onCrop()}
               />
               <Typography>{`width: ${cropDimensions.width} | height:${cropDimensions.height}`}</Typography>
             </Stack>
