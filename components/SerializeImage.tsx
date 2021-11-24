@@ -18,6 +18,7 @@ import ReactCrop, { Crop } from "react-image-crop";
 import { getCroppedImg } from "src/getCroppedImg";
 import { getFileImage } from "src/getFileImage";
 import { srcToFile } from "src/srcToFile";
+import { closestMultipleOf } from "src/closestMultipleOf";
 
 const SerializeImage = () => {
   const [file, setFile] = useState<File>();
@@ -43,50 +44,34 @@ const SerializeImage = () => {
   }, [crop, cropDimensions?.height, cropDimensions?.width]);
 
   useEffect(() => {
-    if (crop?.height) {
-      let closestMultipleOf8 = Math.round(crop.height);
-      while (closestMultipleOf8 % 8 !== 0) {
-        closestMultipleOf8 -= 1;
+    if (crop?.height && dimensions?.height) {
+      const snappedHeight = closestMultipleOf(8, crop.height);
+      if (snappedHeight < dimensions.height) {
+        setCropDimensions({
+          width: crop.width && Math.round(crop.width),
+          height: snappedHeight,
+        });
+      } else {
+        setCropDimensions({
+          width: crop.width && Math.round(crop.width),
+          height: snappedHeight - 8,
+        });
       }
-      setCropDimensions({
-        width: crop.width && Math.round(crop.width),
-        height: crop.height && closestMultipleOf8,
-      });
     }
-  }, [crop]);
+  }, [crop, dimensions]);
 
   useEffect(() => {
     if (file) {
       getImageDimensions(file).then((dimensions) => {
         setDimensions(dimensions);
-        let closestMultipleOf8 = dimensions.height;
-        while (closestMultipleOf8 % 8 !== 0) {
-          closestMultipleOf8 -= 1;
-        }
         setCrop({
-          width: dimensions.width,
-          height: closestMultipleOf8,
+          width: Math.round(dimensions.width),
+          height: Math.round(dimensions.height),
         });
       });
       setCropFile(URL.createObjectURL(file));
     }
   }, [file]);
-
-  useEffect(() => {
-    if (cropDimensions?.height) {
-      if (cropDimensions.height % 8 !== 0) {
-        let closestMultipleOf8 = cropDimensions.height;
-        while (closestMultipleOf8 % 8 !== 0) {
-          closestMultipleOf8 -= 1;
-        }
-        setError(
-          `Height needs to be a multiple of 8. Try ${closestMultipleOf8}px`
-        );
-      } else {
-        setError("");
-      }
-    }
-  }, [cropDimensions]);
 
   const handleFileChange = useCallback(
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
