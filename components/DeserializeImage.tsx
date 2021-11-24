@@ -102,7 +102,7 @@ const DeserializeImage = () => {
             variant="contained"
             onClick={() => send()}
           >
-            Serialize
+            Deserialize
           </LoadingButton>
 
           <Stack>
@@ -128,8 +128,8 @@ const DeserializeImage = () => {
       >
         <img
           src={image}
-          alt="Your serialized image"
-          title="Your serialized image"
+          alt="Your deserialized image"
+          title="Your deserialized image"
         />
       </ImageDialog>{" "}
     </>

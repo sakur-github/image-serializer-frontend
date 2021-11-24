@@ -145,7 +145,7 @@ const SerializeImage = () => {
             loading={loading}
             style={{ marginTop: "auto" }}
           >
-            Deserialize
+            Serialize
           </LoadingButton>
           <Stack>
             <Typography>Don&apos;t have an image?</Typography>
