@@ -31,7 +31,10 @@ const SerializeImage = () => {
 
   useEffect(() => {
     if (crop) {
-      setCropDimensions({ width: crop.width, height: crop.height });
+      setCropDimensions({
+        width: crop.width && Math.round(crop.width),
+        height: crop.height && Math.round(crop.height),
+      });
     }
   }, [crop]);
 
