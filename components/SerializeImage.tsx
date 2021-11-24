@@ -46,7 +46,7 @@ const SerializeImage = () => {
   useEffect(() => {
     if (crop?.height && dimensions?.height) {
       const snappedHeight = closestMultipleOf(8, crop.height);
-      if (snappedHeight < dimensions.height) {
+      if (snappedHeight <= dimensions.height) {
         setCropDimensions({
           width: crop.width && Math.round(crop.width),
           height: snappedHeight,
