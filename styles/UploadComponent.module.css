@@ -2,7 +2,15 @@
   height: 100%;
   padding: 2rem;
   min-width: 25vw;
+  min-height: 666px;
 }
+
+@media (min-width: 1000px) {
+  .componentstack {
+    min-width: 450px;
+  }
+}
+
 
 .mainpaper {
   margin-bottom: 2rem;

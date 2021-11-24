@@ -47,7 +47,7 @@ const DeserializeImage = () => {
     <>
       <Paper className={styles.mainpaper}>
         <Stack className={styles.componentstack} spacing={3}>
-          <Link href="/serialize/image" passHref>
+          <Link href="/deserialize" passHref>
             <a>
               <Typography fontSize={32}>Deserialize an image</Typography>
             </a>
@@ -105,7 +105,7 @@ const DeserializeImage = () => {
             Serialize
           </LoadingButton>
 
-          <Stack marginTop="auto">
+          <Stack>
             <Typography>Don&apos;t know what to put in?</Typography>
             <Typography
               component="button"

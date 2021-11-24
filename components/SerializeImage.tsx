@@ -103,7 +103,7 @@ const SerializeImage = () => {
     <>
       <Paper className={styles.mainpaper}>
         <Stack className={styles.componentstack} spacing={3}>
-          <Link href="/serialize/bytes" passHref>
+          <Link href="/serialize" passHref>
             <a>
               <Typography fontSize={32}>Serialize an image</Typography>
             </a>
@@ -116,17 +116,8 @@ const SerializeImage = () => {
             inputProps={{ accept: "image/*" }}
             error={!!error}
           />
-          <LoadingButton
-            disabled={disabled}
-            variant="contained"
-            onClick={() => send()}
-            loading={loading}
-          >
-            Deserialize
-          </LoadingButton>
           {cropDimensions?.height && (
             <Stack spacing={1}>
-              <Typography>{`width: ${cropDimensions.width} | height:${cropDimensions.height}`}</Typography>
               {error && <Alert severity="error">{error}</Alert>}
               {!error && (
                 <Alert severity="success">
@@ -141,9 +132,19 @@ const SerializeImage = () => {
                 crop={crop}
                 onChange={(newCrop) => setCrop(newCrop)}
               />
+              <Typography>{`width: ${cropDimensions.width} | height:${cropDimensions.height}`}</Typography>
             </Stack>
           )}
-          <Stack style={{ marginTop: "auto" }}>
+          <LoadingButton
+            disabled={disabled}
+            variant="contained"
+            onClick={() => send()}
+            loading={loading}
+            style={{ marginTop: "auto" }}
+          >
+            Deserialize
+          </LoadingButton>
+          <Stack>
             <Typography>
               Want to try it out but don&apos;t have any valid images?
             </Typography>
