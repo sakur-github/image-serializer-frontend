@@ -75,7 +75,7 @@ const DeserializeImage = () => {
             onClick={() => send()}
             loading={loading}
           >
-            Serialize
+            Deserialize
           </LoadingButton>
           {dimensions && (
             <Typography>{`Dimensions: ${dimensions.width}px*${dimensions.height}px`}</Typography>
