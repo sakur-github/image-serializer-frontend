@@ -39,7 +39,11 @@ const SerializeImage = () => {
 
   const onCrop = useCallback(() => {
     if (crop?.height && crop?.height % 8 !== 0) {
-      setCrop({ width: cropDimensions?.width, height: cropDimensions?.height });
+      setCrop({
+        ...crop,
+        width: cropDimensions?.width,
+        height: cropDimensions?.height,
+      });
     }
   }, [crop, cropDimensions?.height, cropDimensions?.width]);
 
