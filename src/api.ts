@@ -5,8 +5,8 @@ import {
   StringUploadInput,
 } from "src/types";
 
-export async function uploadString(input: StringUploadInput) {
-  const response = await fetch(`${backendUrl}/upload/string`, {
+export async function uploadBytes(input: StringUploadInput) {
+  const response = await fetch(`/api/upload/string`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
@@ -20,13 +20,13 @@ export async function uploadString(input: StringUploadInput) {
   }
 }
 
-export async function uploadFile(
+export async function uploadImage(
   input: FileUploadInput
 ): Promise<FileUploadResult> {
   const formData = new FormData();
   formData.append("file", input.file);
   try {
-    const response = await fetch(`${backendUrl}/upload/file`, {
+    const response = await fetch(`/api/upload/file`, {
       method: "POST",
       body: formData,
     });

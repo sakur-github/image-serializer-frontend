@@ -2,12 +2,12 @@ import { useCallback, useState } from "react";
 import Link from "next/link";
 import { Stack, TextField, Typography, Alert, Paper } from "@mui/material";
 import styles from "styles/UploadComponent.module.css";
-import { uploadString } from "src/api";
+import { uploadBytes } from "src/api";
 import { example } from "src/example";
 import { LoadingButton } from "@mui/lab";
 import ImageDialog from "./ImageDialog";
 
-const ImageGeneration = () => {
+const SerializeImage = () => {
   const [content, setContent] = useState<string>("");
   const [width, setWidth] = useState<string>("");
   const [widthError, setWidthError] = useState(false);
@@ -23,7 +23,7 @@ const ImageGeneration = () => {
     setError("");
     setLoading(true);
     if (!disabled) {
-      uploadString({
+      uploadBytes({
         content,
         width: Number(width),
         height: Number(height),
@@ -47,9 +47,9 @@ const ImageGeneration = () => {
     <>
       <Paper className={styles.mainpaper}>
         <Stack className={styles.componentstack} spacing={3}>
-          <Link href="/generate/image" passHref>
+          <Link href="/serialize/image" passHref>
             <a>
-              <Typography fontSize={32}>Generate an image</Typography>
+              <Typography fontSize={32}>Deserialize an image</Typography>
             </a>
           </Link>
           {error && <Alert severity="error">{error}</Alert>}
@@ -102,7 +102,7 @@ const ImageGeneration = () => {
             variant="contained"
             onClick={() => send()}
           >
-            Generate
+            Serialize
           </LoadingButton>
 
           <Stack>
@@ -124,12 +124,16 @@ const ImageGeneration = () => {
       <ImageDialog
         open={dialogOpen}
         setOpen={setDialogOpen}
-        image={{ name: "example.png", src: image }}
+        image={{ name: "serialized.png", src: image }}
       >
-        <img src={image} alt="Your generated image" />
+        <img
+          src={image}
+          alt="Your serialized image"
+          title="Your serialized image"
+        />
       </ImageDialog>{" "}
     </>
   );
 };
 
-export default ImageGeneration;
+export default SerializeImage;

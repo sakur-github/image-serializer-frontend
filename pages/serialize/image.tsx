@@ -1,19 +1,19 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import styles from "styles/Home.module.css";
-import ByteGeneration from "components/ByteGeneration";
+import SerializeImage from "components/SerializeImage";
 
 const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <Head>
         <title>Image Serializer</title>
-        <meta name="description" content="Generate bytes from an image" />
+        <meta name="description" content="Deserialize an image from bytes" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
-        <ByteGeneration />
+        <SerializeImage />
       </main>
     </div>
   );

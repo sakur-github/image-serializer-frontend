@@ -5,12 +5,12 @@ import Paper from "@mui/material/Paper";
 import { Stack, TextField, Typography, Alert, Button } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import styles from "styles/UploadComponent.module.css";
-import { uploadFile } from "src/api";
+import { uploadImage } from "src/api";
 import ContentDialog from "./ContentDialog";
 import ExampleDialog from "./ImageDialog";
 import { getImageDimensions } from "src/getImageDimensions";
 
-const ByteGeneration = () => {
+const DeserializeImage = () => {
   const [file, setFile] = useState<File>();
   const [error, setError] = useState("");
   const [content, setContent] = useState("");
@@ -39,7 +39,7 @@ const ByteGeneration = () => {
   const send = useCallback(() => {
     if (!disabled) {
       setLoading(true);
-      uploadFile({ file }).then((data) => {
+      uploadImage({ file }).then((data) => {
         setLoading(false);
         if (data?.message) {
           setError(data.message);
@@ -55,9 +55,9 @@ const ByteGeneration = () => {
     <>
       <Paper className={styles.mainpaper}>
         <Stack className={styles.componentstack} spacing={3}>
-          <Link href="/generate/bytes" passHref>
+          <Link href="/serialize/bytes" passHref>
             <a>
-              <Typography fontSize={32}>Generate bytes</Typography>
+              <Typography fontSize={32}>Serialize an image</Typography>
             </a>
           </Link>
           {error && <Alert severity="error">{error}</Alert>}
@@ -75,7 +75,7 @@ const ByteGeneration = () => {
             onClick={() => send()}
             loading={loading}
           >
-            Generate
+            Serialize
           </LoadingButton>
           {dimensions && (
             <Typography>{`Dimensions: ${dimensions.width}px*${dimensions.height}px`}</Typography>
@@ -116,4 +116,4 @@ const ByteGeneration = () => {
   );
 };
 
-export default ByteGeneration;
+export default DeserializeImage;
