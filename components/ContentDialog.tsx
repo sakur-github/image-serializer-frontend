@@ -62,7 +62,10 @@ export default function ContentDialog({
           </Tooltip>
         </Stack>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText
+            style={{ whiteSpace: "pre-line" }}
+            id="alert-dialog-description"
+          >
             {content}
           </DialogContentText>
         </DialogContent>
