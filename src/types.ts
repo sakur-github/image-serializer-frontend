@@ -13,4 +13,5 @@ export type FileUploadInput = {
 export type FileUploadResult = {
   message?: string;
   content?: string;
+  statusCode?: number;
 };

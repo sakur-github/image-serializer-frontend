@@ -25,6 +25,7 @@ export async function uploadImage(
 ): Promise<FileUploadResult> {
   const formData = new FormData();
   formData.append("file", input.file);
+  let statusCode = 200;
   try {
     const response = await fetch(
       `/api/serialize?smoothBrightness=${input.smoothBrightness}&lineLength=${input.lineLength}`,
@@ -33,10 +34,11 @@ export async function uploadImage(
         body: formData,
       }
     );
+    statusCode = response.status;
     const data = await response.json();
     return data;
   } catch (e: any) {
     const message = e?.message;
-    return { message };
+    return { message, statusCode };
   }
 }

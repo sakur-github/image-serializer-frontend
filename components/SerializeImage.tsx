@@ -103,7 +103,10 @@ const SerializeImage = () => {
           }).then((data) => {
             setLoading(false);
             if (data?.message) {
-              setError(data.message);
+              if (data.statusCode === 500)
+                setError("An unknown error occured on the server.");
+              else setError(data.message);
+              console.log(data.message);
             } else if (data?.content) {
               setContent(data.content);
               setDialogOpen(true);
