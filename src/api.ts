@@ -27,7 +27,7 @@ export async function uploadImage(
   formData.append("file", input.file);
   try {
     const response = await fetch(
-      `/api/serialize?smoothBrightness=${input.smoothBrightness}`,
+      `/api/serialize?smoothBrightness=${input.smoothBrightness}&lineLength=${input.lineLength}`,
       {
         method: "POST",
         body: formData,

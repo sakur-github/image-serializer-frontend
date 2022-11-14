@@ -35,6 +35,8 @@ const SerializeImage = () => {
   const [cropFile, setCropFile] = useState<string>("");
   const [crop, setCrop] = useState<Partial<Crop>>({});
   const [smoothBrightness, setSmoothBrightness] = useState(false);
+  const [lineLength, setLineLength] = useState(8);
+  const [lineLengthError, setLineLengthError] = useState(false);
   const disabled = !file || !!error;
 
   const onCrop = useCallback(() => {
@@ -94,7 +96,11 @@ const SerializeImage = () => {
       getFileImage(file).then((image) => {
         getCroppedImg(image, crop as Crop).then((blob) => {
           const fileFromBlob = new File([blob as Blob], "cropped.jpeg");
-          uploadImage({ file: fileFromBlob, smoothBrightness }).then((data) => {
+          uploadImage({
+            file: fileFromBlob,
+            smoothBrightness,
+            lineLength,
+          }).then((data) => {
             setLoading(false);
             if (data?.message) {
               setError(data.message);
@@ -106,7 +112,7 @@ const SerializeImage = () => {
         });
       });
     }
-  }, [crop, disabled, file, smoothBrightness]);
+  }, [crop, disabled, file, smoothBrightness, lineLength]);
 
   return (
     <>
@@ -154,6 +160,25 @@ const SerializeImage = () => {
               />
             }
             label="Smooth Brightness"
+          />
+
+          <TextField
+            variant="standard"
+            label="Line length"
+            helperText={lineLengthError ? "Must be an integer" : ""}
+            value={lineLength ? lineLength : ""}
+            error={lineLengthError}
+            onChange={(e) => {
+              const number = Number(e.target.value);
+              setLineLengthError(!Number.isInteger(number));
+
+              if (Number.isInteger(number)) {
+                setLineLength(number);
+              }
+            }}
+            onBlur={() => {
+              if (!lineLength) setLineLength(8);
+            }}
           />
 
           <LoadingButton
