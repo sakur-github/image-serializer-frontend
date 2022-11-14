@@ -25,7 +25,15 @@ const Home: NextPage = () => {
         </Stack>
       </main>
       <div
-        style={{ color: "#ffffff", textAlign: "center", marginBottom: "1rem" }}
+        style={{
+          color: "#ffffff",
+          textAlign: "center",
+          marginBottom: "1rem",
+          position: "absolute",
+          bottom: "1rem",
+          width: "99%",
+          overflow: "hidden",
+        }}
       >
         <a href="https://github.com/sakur-github/image-serializer-frontend">
           Want the source code? Click me
