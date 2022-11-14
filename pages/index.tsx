@@ -24,6 +24,13 @@ const Home: NextPage = () => {
           <DeserializeImage />
         </Stack>
       </main>
+      <div
+        style={{ color: "#ffffff", textAlign: "center", marginBottom: "1rem" }}
+      >
+        <a href="https://github.com/sakur-github/image-serializer-frontend">
+          Want the source code? Click me
+        </a>
+      </div>
     </div>
   );
 };
